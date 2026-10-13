@@ -16,7 +16,7 @@ version: '3.6'
 
 services:
   web:
-    image: fabreguesm/flx-agentes-web:0.1.1
+    image: fabreguesm/flx-agentes-web:0.1.2
     hostname: flx-agentes-web
     ports:
       - target: 3000
