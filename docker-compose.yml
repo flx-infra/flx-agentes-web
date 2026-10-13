@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# flx-agentes-web: portal de los agentes de Flexxus (login + Asistente de Soporte API + Cotizador I+D)
+#
+# Codigo e imagen: bitbucket.org/flexxus_id/flx-agentes-web
+# Este repo es solo el stack: lo que Portainer despliega.
+#
+# Usuarios y permisos en flx-agentes-db (red flx-agentes). Las aplicaciones van detras, por la misma red:
+# el portal les pasa la identidad firmada con PORTAL_SECRET (mismo valor en los stacks del Asistente y el Cotizador).
+#
+# Sin dominio: publica un puerto en la red interna (http://<ip del swarm>:${PORT_PUBLICO}).
+#
+# Variables del stack: SERVICE_NAME, NODE, LOKI_URL, PORT_PUBLICO, PORTAL_ADMIN_EMAIL y los secretos
+# PORTAL_SECRET y PORTAL_BOOTSTRAP_TOKEN (solo para crear el primer administrador; despues se vacia).
+# ---------------------------------------------------------------------------
+version: '3.6'
+
+services:
+  web:
+    image: fabreguesm/flx-agentes-web:0.1.0
+    hostname: flx-agentes-web
+    ports:
+      - target: 3000
+        published: ${PORT_PUBLICO}
+        protocol: tcp
+        mode: ingress
+    environment:
+      - TZ=America/Argentina/Buenos_Aires
+      - PORTAL_SECRET=${PORTAL_SECRET}
+      - PORTAL_ADMIN_EMAIL=${PORTAL_ADMIN_EMAIL}
+      - PORTAL_BOOTSTRAP_TOKEN=${PORTAL_BOOTSTRAP_TOKEN}
+      - PGHOST=flx-agentes-db_postgres
+      - PGUSER=flx_agentes
+      - PGDATABASE=flx_agentes
+      - ASISTENTE_URL=http://flx-agente-soporte-api_web:3000
+      - COTIZADOR_URL=http://flx-agente-cotizador_web:3000
+    networks:
+      - default
+      - agentes
+    deploy:
+      placement:
+        constraints: ["${NODE}"]
+      restart_policy:
+        condition: any
+        delay: 10s
+    logging:
+      driver: loki
+      options:
+        loki-url: ${LOKI_URL}
+
+networks:
+  agentes:
+    external: true
+    name: flx-agentes
