@@ -10,7 +10,7 @@
 # Sin dominio: publica un puerto en la red interna (http://<ip del swarm>:${PORT_PUBLICO}).
 #
 # Variables del stack: SERVICE_NAME, NODE, LOKI_URL, PORT_PUBLICO, PORTAL_ADMIN_EMAIL y los secretos
-# PORTAL_SECRET y PORTAL_BOOTSTRAP_TOKEN (solo para crear el primer administrador; despues se vacia).
+# PORTAL_SECRET, AGENTES_TOKEN y PORTAL_BOOTSTRAP_TOKEN (solo para crear el primer administrador; despues se vacia).
 # ---------------------------------------------------------------------------
 version: '3.6'
 
@@ -28,6 +28,9 @@ services:
       - PORTAL_SECRET=${PORTAL_SECRET}
       - PORTAL_ADMIN_EMAIL=${PORTAL_ADMIN_EMAIL}
       - PORTAL_BOOTSTRAP_TOKEN=${PORTAL_BOOTSTRAP_TOKEN}
+      # Panel de agentes (desde 0.2.0): mismo valor que en flx-agentes-runner
+      - AGENTES_TOKEN=${AGENTES_TOKEN}
+      - RUNNER_URL=http://flx-agentes-runner_runner:3000
       - PGHOST=flx-agentes-db_postgres
       - PGUSER=flx_agentes
       - PGDATABASE=flx_agentes
