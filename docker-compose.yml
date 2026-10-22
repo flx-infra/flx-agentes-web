@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# flx-agentes-web: portal de los agentes de Flexxus (login + Asistente de Soporte API + Cotizador I+D)
+# flx-agentes-web: portal de los agentes de Flexxus (login + Asistente de Soporte API + Cotizador I+D + Specs de historias)
 #
 # Codigo e imagen: bitbucket.org/flexxus_id/flx-agentes-web
 # Este repo es solo el stack: lo que Portainer despliega.
@@ -16,7 +16,7 @@ version: '3.6'
 
 services:
   web:
-    image: fabreguesm/flx-agentes-web:0.2.0
+    image: fabreguesm/flx-agentes-web:0.3.0
     hostname: flx-agentes-web
     ports:
       - target: 3000
@@ -36,6 +36,8 @@ services:
       - PGDATABASE=flx_agentes
       - ASISTENTE_URL=http://flx-agente-soporte-api_web:3000
       - COTIZADOR_URL=http://flx-agente-cotizador_web:3000
+      # Specs de historias (desde 0.3.0)
+      - HISTORIAS_URL=http://flx-agente-historias_web:3000
     networks:
       - default
       - agentes
