@@ -16,7 +16,7 @@ version: '3.6'
 
 services:
   web:
-    image: fabreguesm/flx-agentes-web:0.3.0
+    image: fabreguesm/flx-agentes-web:0.4.0
     hostname: flx-agentes-web
     ports:
       - target: 3000
@@ -38,6 +38,7 @@ services:
       - COTIZADOR_URL=http://flx-agente-cotizador_web:3000
       # Specs de historias (desde 0.3.0)
       - HISTORIAS_URL=http://flx-agente-historias_web:3000
+      - RETENCION_MESES=12
     networks:
       - default
       - agentes
